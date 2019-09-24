@@ -125,7 +125,11 @@ public:
 				env->mouse = (Mouse *)app->probe("mouse_linux_input");
 				break;
 			case FRT_ENV_VC4_NOX11:
-				printf("frt: vc4 driver requires X11.\n");
+				env->video = (Video *)app->probe("video_bcm_full");
+				env->keyboard = (Keyboard *)app->probe("keyboard_linux_input");
+				env->mouse = (Mouse *)app->probe("mouse_linux_input");
+			default:
+				printf("frt: probe returned an invalid value \n");
 				exit(1);
 		}
 	}

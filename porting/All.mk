@@ -30,7 +30,12 @@ CXXFLAGS += -DFRT_MOCK_KEY_MAPPING_X11
 endif
 
 ifdef HAS_BCM
-OBJS += video_bcm.o bcm.gen.o
+OBJS += video_bcm.o bcm.gen.o video_bcm_full.o
+CXXFLAGS += -I/opt/vc/include
+endif
+
+ifdef HAS_BCM_FULL
+OBJS += video_bcm_full.o
 CXXFLAGS += -I/opt/vc/include
 endif
 
