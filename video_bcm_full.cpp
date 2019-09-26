@@ -140,11 +140,11 @@ public:
         
         eglGetConfigs(display, NULL, 0, &count);
         configs = malloc(count * sizeof(configs));
-        result = eglChooseConfig (display, attributes, configs, count, &num_config);
+        result = eglChooseConfig (display, attributes, &configs, count, &num_config);
         if (result == EGL_FALSE)
             fatal("eglChooseConfig failed.");
 
-        config_index = _match_config_to_visual(display,GBM_FORMAT_XRGB8888,configs,num_config);
+        config_index = _match_config_to_visual(display,GBM_FORMAT_XRGB8888,&configs,num_config);
         context = eglCreateContext (display, configs[config_index], EGL_NO_CONTEXT, context_attribs);
         if (context == EGL_NO_CONTEXT)
             fatal("eglCreateContext failed.");
