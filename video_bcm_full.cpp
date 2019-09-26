@@ -57,7 +57,7 @@ private:
     uint32_t pitch;
     int32_t fb;
     uint64_t modifier;
-    EGLConfig **configs;
+    EGLConfig configs;
     int config_index;
 
     drmModeConnector * _find_connector (drmModeRes *resources) 
