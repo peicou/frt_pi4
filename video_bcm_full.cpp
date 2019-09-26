@@ -61,7 +61,7 @@ private:
 
     drmModeConnector * _find_connector (drmModeRes *resources) 
     {
-        for (i=0; i<resources->count_connectors; i++) 
+        for (int i=0; i<resources->count_connectors; i++) 
         {
             drmModeConnector *connector = drmModeGetConnector (device, resources->connectors[i]);
             if (connector->connection == DRM_MODE_CONNECTED) {return connector;}
@@ -80,7 +80,7 @@ private:
     int _match_config_to_visual(EGLDisplay egl_display, EGLint visual_id, EGLConfig *configs, int count) 
     {
         EGLint id;
-        for (i = 0; i < count; ++i) 
+        for (int i = 0; i < count; ++i) 
         {
             if (!eglGetConfigAttrib(egl_display, configs[i], EGL_NATIVE_VISUAL_ID,&id)) continue;
             if (id == visual_id) return i;
@@ -93,6 +93,9 @@ public:
     {
         EGLBoolean result;
         EGLint num_config;
+        EGLint count=0;
+        int config_index;
+        
         static EGLint attributes[] = {
                 EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
                 EGL_RED_SIZE, 8,
@@ -111,7 +114,7 @@ public:
         printf("card1 oppened\n");
         resources = drmModeGetResources (device);
         printf("resources gotten\n");
-        connector = find_connector (resources);
+        connector = _find_connector (resources);
         printf("connector found \n");
         if (connector == NULL)
         {
@@ -119,7 +122,7 @@ public:
         }
         connector_id = connector->connector_id;
         mode_info = connector->modes[0];
-        encoder = find_encoder (resources, connector);
+        encoder = _find_encoder (resources, connector);
         printf("encoder oppened\n");
         crtc = drmModeGetCrtc (device, encoder->crtc_id);
         drmModeFreeEncoder (encoder);
