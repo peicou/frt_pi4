@@ -57,7 +57,7 @@ private:
     uint32_t pitch;
     int32_t fb;
     uint64_t modifier;
-    EGLConfig configs;
+    EGLConfig configs[32];
     int config_index;
 
     drmModeConnector * _find_connector (drmModeRes *resources) 
@@ -139,7 +139,6 @@ public:
             fatal("eglBindAPI failed.");
         
         eglGetConfigs(display, NULL, 0, &count);
-        configs = malloc(count * sizeof(configs));
         result = eglChooseConfig (display, attributes, &configs, count, &num_config);
         if (result == EGL_FALSE)
             fatal("eglChooseConfig failed.");
@@ -154,7 +153,6 @@ public:
         surface = eglCreateWindowSurface (display, configs[config_index], gbm_surface, NULL);
         if (surface == EGL_NO_SURFACE)
             fatal("video_bcm: eglCreateWindowSurface failed.");
-        free(configs);
     }
 
     void swap_buffers()
