@@ -1,4 +1,5 @@
 // video_bcm.cc
+//scons platform=frt target=release frt_arch=pi4 tools=no module_webm_enabled=no CCFLAGS="-mcpu=cortex-a72 -mfpu=neon-fp-armv8 -mtune=cortex-a72 -mfloat-abi=hard -mlittle-endian -munaligned-access"
 /*
  * FRT - A Godot platform targeting single board computers
  * Copyright (c) 2017-2019  Emanuele Fornara
@@ -177,7 +178,7 @@ private:
     bool initialized;
     Vec2 screen_size;
     bool vsync;
-    
+
     void init_egl(Vec2 size) {
         egl.init();
         egl.create_surface(view);
@@ -210,8 +211,8 @@ public:
         : initialized(false), vsync(true) {}
     const char *get_id() const { return "video_bcm_full"; }
     bool probe() {
-        if (!frt_load_bcm("libbcm_host.so"))
-            return false;
+        //if (!frt_load_bcm("libbcm_host.so"))
+        //    return false;
         if (!frt_load_gles2("libbrcmGLESv2.so"))
             return false;
         if (!frt_load_egl("libbrcmEGL.so"))

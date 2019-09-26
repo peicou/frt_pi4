@@ -36,7 +36,7 @@ endif
 
 ifdef HAS_BCM_FULL
 OBJS += video_bcm_full.o
-CXXFLAGS += -I/opt/vc/include
+CXXFLAGS += -I/opt/vc/include -I/usr/include/libdrm
 endif
 
 LIBS += -ldl

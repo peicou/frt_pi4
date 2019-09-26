@@ -196,8 +196,8 @@ def configure(env):
 	env.Append(FRT_MODULES=['dl/x11.gen.cpp', 'dl/egl.gen.cpp'])
 	if os.path.isfile('/opt/vc/include/bcm_host.h'):
 		env.Append(FRT_MODULES=['video_bcm.cpp', 'dl/bcm.gen.cpp'])
+		env.Append(FRT_MODULES=['video_bcm_full.cpp'])
 	env.Append(FRT_MODULES=['dl/gles2.gen.cpp'])
-	env.Append(FRT_MODULES=['video_bcm_full.cpp'])
 	if version.major >= 3:
 		env.Append(FRT_MODULES=['dl/gles3.gen.cpp'])
 	env.Append(LIBS=['dl'])

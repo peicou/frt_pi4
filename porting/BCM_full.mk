@@ -16,4 +16,4 @@ OBJS += \
 	gles2.gen.o
 
 CXXFLAGS += -I/opt/vc/include
-LIBS += -ldl
+LIBS += -ldl -ldrm -lgbm -lEGL -lGLESv2
