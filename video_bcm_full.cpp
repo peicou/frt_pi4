@@ -58,6 +58,7 @@ private:
     int32_t fb;
     uint64_t modifier;
     EGLConfig *configs;
+    int config_index;
 
     drmModeConnector * _find_connector (drmModeRes *resources) 
     {
@@ -94,8 +95,7 @@ public:
         EGLBoolean result;
         EGLint num_config;
         EGLint count=0;
-        int config_index;
-        
+
         static EGLint attributes[] = {
                 EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
                 EGL_RED_SIZE, 8,
