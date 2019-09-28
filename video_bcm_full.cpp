@@ -33,9 +33,9 @@
 #include "dl/gles2.gen.h"
 #include "bits/egl_base_context.h"
 
-#include <xf86drm.h>
-#include <xf86drmMode.h>
-#include <gbm.h>
+#include "dl/gbm.gen.h"
+#include "dl/drm.gen.h"
+
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -190,18 +190,27 @@ private:
     bool initialized;
     Vec2 screen_size;
     bool vsync;
+    drmModeCrtc * crtc;
 
     void init_egl(Vec2 size) {
         egl.init();
         egl.create_surface();
         egl.make_current();
+
+        crtc = egl.getCrtc();
+
+        screen_size.x = get_window_width();
+        screen_size.y = get_window_height();
+
         initialized = true;
     }
     void cleanup_egl() 
     {
-        drmModeCrtc * crtc = egl.getCrtc();
         if (!initialized)
             return;
+
+        if (crtc == NULL)
+        return;
 
         drmModeSetCrtc (egl.getDevice(), crtc->crtc_id, crtc->buffer_id, crtc->x, crtc->y, egl.getConnector_id(), 1, &crtc->mode);
         drmModeFreeCrtc (crtc);
@@ -230,8 +239,7 @@ public:
             return false;
         if (!frt_load_egl("libbrcmEGL.so"))
             return false;
-        screen_size.x = 720;
-        screen_size.y = 480;
+        
         return true;
     }
     void cleanup() {
@@ -240,13 +248,45 @@ public:
     // Video
     Vec2 get_screen_size() const { return screen_size; }
 
+    Vec2 get_view_size() const { return screen_size; }
+
     ContextGL *create_the_gl_context(int version, Vec2 size) {
         if (version != 2)
             return 0;
         screen_size = size;
         return this;
     }
+
     bool provides_quit() { return false; }
+
+    void set_title(const char *title) {}
+	
+    Vec2 move_pointer(const Vec2 &screen) {
+		return Vec2(0,0);
+	}
+	
+    void show_pointer(bool enable) {}
+	
+    int get_window_height() 
+    { 
+        int h = 0;
+        if (crtc != NULL)
+        {
+            h = (int)crtc->height;  
+        }     
+        return h;
+    }
+
+    int get_window_width() 
+    { 
+        int w = 0;
+        if (crtc != NULL)
+        {
+            w = (int)crtc->width;  
+        }     
+        return w;
+    }
+
     // ContextGL
     void release_current() {
         egl.release_current();
