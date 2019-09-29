@@ -26,14 +26,14 @@
 #include <xf86drm.h>
 #include <xf86drmMode.h>
 
-typedef extern int (*___drmModeAddFB___)(int fd, uint32_t width, uint32_t height, uint8_t depth, uint8_t bpp, uint32_t pitch, uint32_t bo_handle, uint32_t *buf_id);
+typedef int (*___drmModeAddFB___)(int fd, uint32_t width, uint32_t height, uint8_t depth, uint8_t bpp, uint32_t pitch, uint32_t bo_handle, uint32_t *buf_id);
 typedef int (*___drmModeSetCrtc___)(int fd, uint32_t crtcId, uint32_t bufferId, uint32_t x, uint32_t y, uint32_t *connectors, int count, drmModeModeInfoPtr mode);
-typedef extern int (*___drmModeRmFB___)(int fd, uint32_t bufferId);
-typedef extern void (*___drmModeFreeCrtc___)(drmModeCrtcPtr ptr);
-typedef extern drmModeResPtr (*___drmModeGetResources___)(int fd);
-typedef extern drmModeConnectorPtr (*___drmModeGetConnector___)(int fd, uint32_t connectorId);
+typedef int (*___drmModeRmFB___)(int fd, uint32_t bufferId);
+typedef void (*___drmModeFreeCrtc___)(drmModeCrtcPtr ptr);
+typedef drmModeResPtr (*___drmModeGetResources___)(int fd);
+typedef drmModeConnectorPtr (*___drmModeGetConnector___)(int fd, uint32_t connectorId);
 typedef drmModeEncoderPtr (*___drmModeGetEncoder___)(int fd, uint32_t encoder_id);
-typedef extern drmModeCrtcPtr (*___drmModeGetCrtc___)(int fd, uint32_t crtcId);
-typedef extern void (*___drmModeFreeEncoder___)(drmModeEncoderPtr ptr);
-typedef extern void (*___drmModeFreeConnector___)(drmModeConnectorPtr ptr);
-typedef extern void (*___drmModeFreeResources___)(drmModeResPtr ptr);
+typedef drmModeCrtcPtr (*___drmModeGetCrtc___)(int fd, uint32_t crtcId);
+typedef void (*___drmModeFreeEncoder___)(drmModeEncoderPtr ptr);
+typedef void (*___drmModeFreeConnector___)(drmModeConnectorPtr ptr);
+typedef void (*___drmModeFreeResources___)(drmModeResPtr ptr);
