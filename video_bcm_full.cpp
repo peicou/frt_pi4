@@ -93,6 +93,7 @@ private:
             if (id == visual_id) 
             {
                 printf("   matched! %i \n",i);
+                printf("clearing eglGetError %i. 12288 is success fyi\n", eglGetError());
                 return i;
             }
         }
@@ -140,6 +141,7 @@ public:
         drmModeFreeConnector (_connector);
         drmModeFreeResources (_resources);
         _gbm_device = gbm_create_device (_device);
+        _gbm_surface = gbm_surface_create (_gbm_device, _mode_info.hdisplay, _mode_info.vdisplay, GBM_FORMAT_XRGB8888, GBM_BO_USE_SCANOUT|GBM_BO_USE_RENDERING);
         display = eglGetDisplay (_gbm_device);
     
         result = eglInitialize (display, NULL ,NULL);
@@ -161,9 +163,9 @@ public:
     }
 
     void create_surface() {
-        surface = eglCreateWindowSurface (display, &_configs[_config_index], _gbm_surface, NULL);
+        surface = eglCreateWindowSurface (display, _configs[_config_index], _gbm_surface, NULL);
         if (surface == EGL_NO_SURFACE)
-            printf("video_bcm: eglCreateWindowSurface failed.\n");
+            printf("video_bcm: eglCreateWindowSurface failed., %i\n", eglGetError());
     }
 
     void swap_buffers()
@@ -243,22 +245,22 @@ public:
     const char *get_id() const { return "video_bcm_full"; }
     bool probe() {
         printf("   inside bgmDrm probe\n");
-        if (!frt_load_gbm("libgbm.so"))
+        if (!frt_load_gbm("libgbm.so.1"))
         {
             printf("failed to load libgbm\n");
             return false;
         }
-        if (!frt_load_drm("libdrm.so"))
+        if (!frt_load_drm("libdrm.so.2"))
         {
             printf("failed to load libdrm\n");
             return false;
         }
-        if (!frt_load_gles2("libGLESv2.so"))
+        if (!frt_load_gles2("libGLESv2.so.2"))
         {
             printf("failed to load GLES2\n");
             return false;
         }
-        if (!frt_load_egl("libEGL.so"))
+        if (!frt_load_egl("libEGL.so.1"))
         {
             printf("failed to load EGL\n");
             return false;
