@@ -233,8 +233,10 @@ public:
         : initialized(false), vsync(true) {}
     const char *get_id() const { return "video_bcm_full"; }
     bool probe() {
-        //if (!frt_load_bcm("libbcm_host.so"))
-        //    return false;
+        if (!frt_load_gbm("libgbm.so"))
+            return false;
+        if (!frt_load_gbm("libdrm.so"))
+            return false;
         if (!frt_load_gles2("libbrcmGLESv2.so"))
             return false;
         if (!frt_load_egl("libbrcmEGL.so"))
