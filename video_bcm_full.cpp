@@ -147,7 +147,7 @@ public:
         result = eglInitialize (display, NULL ,NULL);
         if (result == EGL_FALSE)
             printf("eglInitialize failed.\n");
-        result = eglBindAPI (EGL_OPENGL_API);
+        result = eglBindAPI (EGL_OPENGL_ES_API);
         if (result == EGL_FALSE)
             printf("eglBindAPI failed.\n");
         
