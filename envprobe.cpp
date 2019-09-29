@@ -165,9 +165,13 @@ public:
 				env->keyboard = (Keyboard *)app->probe("keyboard_linux_input");
 				env->mouse = (Mouse *)app->probe("mouse_linux_input");
 			case FRT_ENV_GBM_DRM:
+				printf("probing video...\n");
 				env->video = (Video *)app->probe("video_bcm_full");
+				printf("video for gbm drm probed \n");
 				env->keyboard = (Keyboard *)app->probe("keyboard_linux_input");
+				printf("keyboard probed \n");
 				env->mouse = (Mouse *)app->probe("mouse_linux_input");
+				printf("mouse probed \n");
 				break;
 			default:
 				printf("frt: probe returned an invalid value \n");

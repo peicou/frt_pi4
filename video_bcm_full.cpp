@@ -65,6 +65,7 @@ private:
 
     drmModeConnector * _find_connector (drmModeRes *resources) 
     {
+        printf("_find connector \n");
         for (int i=0; i<resources->count_connectors; i++) 
         {
             drmModeConnector *connector = drmModeGetConnector (_device, resources->connectors[i]);
@@ -77,17 +78,23 @@ private:
 
     drmModeEncoder * _find_encoder (drmModeRes *resources, drmModeConnector *connector) 
     {
+        printf("_find encoder \n");
         if (connector->encoder_id) {return drmModeGetEncoder (_device, connector->encoder_id);}
         return NULL; // if no encoder found
     }
 
     int _match_config_to_visual(EGLDisplay egl_display, EGLint visual_id, EGLConfig *configs, int count) 
     {
+        printf("match config to visual \n");
         EGLint id;
         for (int i = 0; i < count; ++i) 
         {
             if (!eglGetConfigAttrib(egl_display, configs[i], EGL_NATIVE_VISUAL_ID,&id)) continue;
-            if (id == visual_id) return i;
+            if (id == visual_id) 
+            {
+                printf("   matched! %i \n",i);
+                return i;
+            }
         }
         return -1;
     }
@@ -95,6 +102,7 @@ private:
 public:
     void init()
     {
+        printf("gbmDrm init \n");
         EGLBoolean result;
         EGLint num_config;
         EGLint count=0;
@@ -142,14 +150,14 @@ public:
             printf("eglBindAPI failed.\n");
         
         eglGetConfigs(display, NULL, 0, &count);
+        printf("EGL received %i configs\n", count);
         result = eglChooseConfig (display, attributes, &_configs[0], count, &num_config);
-        if (result == EGL_FALSE)
-            printf("eglChooseConfig failed.\n");
+        result == EGL_FALSE ? printf("eglChooseConfig failed.\n") : printf("chooseConfigs returned %i configs.\n", num_config);
 
         _config_index = _match_config_to_visual(display,GBM_FORMAT_XRGB8888,&_configs[0],num_config);
-        context = eglCreateContext (display, &_configs[_config_index], EGL_NO_CONTEXT, context_attribs);
+        context = eglCreateContext (display, _configs[_config_index], EGL_NO_CONTEXT, context_attribs);
         if (context == EGL_NO_CONTEXT)
-            printf("eglCreateContext failed.\n");
+            printf("eglCreateContext failed: %i.\n", eglGetError());
     }
 
     void create_surface() {
@@ -193,6 +201,7 @@ private:
     drmModeCrtc * crtc;
 
     void init_egl(Vec2 size) {
+        printf("BCMFull init_egl\n");
         egl.init();
         egl.create_surface();
         egl.make_current();
@@ -233,6 +242,7 @@ public:
         : initialized(false), vsync(true) {}
     const char *get_id() const { return "video_bcm_full"; }
     bool probe() {
+        printf("   inside bgmDrm probe\n");
         if (!frt_load_gbm("libgbm.so"))
         {
             printf("failed to load libgbm\n");
@@ -243,12 +253,12 @@ public:
             printf("failed to load libdrm\n");
             return false;
         }
-        if (!frt_load_gles2("libbrcmGLESv2.so"))
+        if (!frt_load_gles2("libGLESv2.so"))
         {
             printf("failed to load GLES2\n");
             return false;
         }
-        if (!frt_load_egl("libbrcmEGL.so"))
+        if (!frt_load_egl("libEGL.so"))
         {
             printf("failed to load EGL\n");
             return false;

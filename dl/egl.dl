@@ -39,3 +39,4 @@ typedef EGLBoolean (*___eglSwapBuffers___)(EGLDisplay dpy, EGLSurface surface);
 typedef EGLBoolean (*___eglTerminate___)(EGLDisplay dpy);
 typedef EGLBoolean (*___eglSwapInterval___)(EGLDisplay dpy, EGLint interval);
 typedef EGLBoolean (*___eglBindAPI___)(EGLenum api);
+typedef EGLint (*___eglGetError___)();
