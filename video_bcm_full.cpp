@@ -121,7 +121,7 @@ public:
         printf("connector found \n");
         if (_connector == NULL)
         {
-            fatal("connector is null. no fb found");
+            printf("connector is null. no fb found");
         }
         _connector_id = _connector->connector_id;
         _mode_info = _connector->modes[0];
@@ -136,26 +136,26 @@ public:
     
         result = eglInitialize (display, NULL ,NULL);
         if (result == EGL_FALSE)
-            fatal("eglInitialize failed.");
+            printf("eglInitialize failed.\n");
         result = eglBindAPI (EGL_OPENGL_API);
         if (result == EGL_FALSE)
-            fatal("eglBindAPI failed.");
+            printf("eglBindAPI failed.\n");
         
         eglGetConfigs(display, NULL, 0, &count);
         result = eglChooseConfig (display, attributes, &_configs[0], count, &num_config);
         if (result == EGL_FALSE)
-            fatal("eglChooseConfig failed.");
+            printf("eglChooseConfig failed.\n");
 
         _config_index = _match_config_to_visual(display,GBM_FORMAT_XRGB8888,&_configs[0],num_config);
         context = eglCreateContext (display, &_configs[_config_index], EGL_NO_CONTEXT, context_attribs);
         if (context == EGL_NO_CONTEXT)
-            fatal("eglCreateContext failed.");
+            printf("eglCreateContext failed.\n");
     }
 
     void create_surface() {
         surface = eglCreateWindowSurface (display, &_configs[_config_index], _gbm_surface, NULL);
         if (surface == EGL_NO_SURFACE)
-            fatal("video_bcm: eglCreateWindowSurface failed.");
+            printf("video_bcm: eglCreateWindowSurface failed.\n");
     }
 
     void swap_buffers()
@@ -234,13 +234,25 @@ public:
     const char *get_id() const { return "video_bcm_full"; }
     bool probe() {
         if (!frt_load_gbm("libgbm.so"))
+        {
+            printf("failed to load libgbm\n");
             return false;
-        if (!frt_load_gbm("libdrm.so"))
+        }
+        if (!frt_load_drm("libdrm.so"))
+        {
+            printf("failed to load libdrm\n");
             return false;
+        }
         if (!frt_load_gles2("libbrcmGLESv2.so"))
+        {
+            printf("failed to load GLES2\n");
             return false;
+        }
         if (!frt_load_egl("libbrcmEGL.so"))
+        {
+            printf("failed to load EGL\n");
             return false;
+        }
         
         return true;
     }
